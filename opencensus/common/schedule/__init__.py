@@ -11,8 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from six.moves import queue
+from multiprocessing import Manager
+import queue
 
 import logging
 import threading
@@ -82,7 +82,8 @@ class QueueExitEvent(QueueEvent):
 class Queue(object):
     def __init__(self, capacity):
         self.EXIT_EVENT = QueueExitEvent('EXIT')
-        self._queue = queue.Queue(maxsize=capacity)
+        manager = Manager()
+        self._queue = manager.Queue(maxsize=capacity)
 
     def _gets(self, count, timeout):
         start_time = time.time()
